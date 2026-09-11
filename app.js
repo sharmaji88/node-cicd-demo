@@ -7,7 +7,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.json({
         message: "Hello from Node.js CI/CD!"
-    });
+    }); 
 });
 
 app.get("/health", (req, res) => {
