@@ -40,6 +40,13 @@ jobs:
           context: .
           push: true
           tags: mohit230297/node-cicd-demo:latest
+
+
+
+
+
+
+          
           # tags: sharmaji88/node-cicd-demo:latest
 
 
