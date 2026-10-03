@@ -1,0 +1,7 @@
+services:
+  node-app:
+    image: mohit230297/node-cicd-demo:latest
+    container_name: node-cicd-container
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
