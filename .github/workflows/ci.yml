@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI/CD
 
 on:
   push:
@@ -6,16 +6,16 @@ on:
   pull_request:
     branches: [main]
 
-jobs: 
-  test:
-    runs-on: ubuntu-latest 
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4 
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
@@ -26,5 +26,61 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Build Docker image
-        run: docker build -t node-cicd-demo .
+      - name: Login to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: mohit230297/node-cicd-demo:latest
+          # tags: sharmaji88/node-cicd-demo:latest
+
+
+# name: Node.js CI
+
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+
+# jobs: 
+#   test:
+#     runs-on: ubuntu-latest 
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4 
+#         with:
+#           node-version: 22
+#           cache: npm
+
+#       - name: Install dependencies
+#         run: npm ci
+
+#       - name: Run tests
+#         run: npm test
+
+#       - name: Build Docker image
+#         run: docker build -t node-cicd-demo .
+
+
+
+
+# new step - push docker image to docker-hub
+#  - create ec2 instance server
+#  - create docker compose file in app
+#  - write scp cmd for copy docker composen file into ec2 server
+#  - ssh login into ec2 server
+#  - run docker compose -p command 
+ 
